@@ -31,6 +31,7 @@ runs:
             exit 1
           else
             echo "🎉 内核本体编译成功！"
+          fi
       
     - name: 收集编译后的产物
       shell: bash
