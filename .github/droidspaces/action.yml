@@ -72,6 +72,13 @@ runs:
         # Namespaces
         CONFIG_IPC_NS=y
         CONFIG_PID_NS=y
+
+        # 关闭 clang Full LTO 与 CFI：f50_defconfig 默认开启，
+        # 在 GitHub 免费 Runner (7GB 内存) 上最终链接 vmlinux.o 会内存耗尽被杀 (SIGTERM/143)
+        CONFIG_LTO_NONE=y
+        # CONFIG_LTO_CLANG is not set
+        # CONFIG_THINLTO is not set
+        # CONFIG_CFI_CLANG is not set
         EOF
 
         # NixOS / tmpfs support
