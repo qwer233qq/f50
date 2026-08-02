@@ -2,31 +2,11 @@ name: zte ums9620 kernel-src
 description: 'ZTE UMS9620 (MiFi F50) 内核代码'
 runs:
   using: "composite"
-  steps:    
-    - name: Get Latest Kernel Commit Hash
-      id: get-hash
-      shell: bash
-      run: |
-        # 远程获取 ZTE UMS9620 内核仓库 main 分支最新的 commit hash
-        LATEST_HASH=$(git ls-remote https://github.com/Enceka/android_kernel_zte_ums9620_mifi_f50.git refs/heads/main | awk '{print $1}')
-        echo "最新提交哈希: $LATEST_HASH"
-        # 将哈希值存入 GitHub Actions 的环境变量输出中
-        echo "kernel_hash=$LATEST_HASH" >> $GITHUB_OUTPUT
-
-    - name: 设置内核源码缓存
-      id: cache-kernel
-      uses: actions/cache@v4
-      with:
-        path: ${{ github.workspace }}/kernel-src
-        # Key 包含了分支名和最新的哈希值。如果远程代码更新了，哈希变了，缓存就会自动失效并重新下载。
-        key: kernel-zte-ums9620-main-${{ steps.get-hash.outputs.kernel_hash }}
-        # 兜底恢复键：如果精确的哈希没对上，先恢复上一次该分支的旧代码，这样 checkout 时只需拉取增量更新，速度极快
-        restore-keys: |
-          kernel-zte-ums9620-main-
-
-    # 3. 只有在缓存未命中（代码有更新或首次运行）时，才执行 checkout
+  steps:
+    # 不做源码缓存：缓存的树可能是上次打过补丁/编译过的旧状态，
+    # 会导致 001/002 补丁 "Reversed patch detected" 或体积过大。
+    # 每次全新 checkout（约 15s），保证干净源码。
     - name: Checkout ZTE UMS9620 Kernel Source
-      if: steps.cache-kernel.outputs.cache-hit != 'true'
       uses: actions/checkout@v4
       with:
         repository: 'Enceka/android_kernel_zte_ums9620_mifi_f50'
