@@ -52,6 +52,7 @@ runs:
         # ls -l include/trace/wda.h || true
 
     - name: 使用 awk 注入 QN5965 标定宏
+      if: false
       shell: bash
       run: |
         cd kernel-src
@@ -76,6 +77,7 @@ runs:
           exit 1
         fi
     - name: 解决 qcom-vadc-common.c 的未使用/重定义冲突
+      if: false
       shell: bash
       run: |
         cd kernel-src
