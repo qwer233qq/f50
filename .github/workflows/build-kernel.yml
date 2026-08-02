@@ -8,7 +8,9 @@ on:
 
 env:
   # clang 编译器选择 google lineage llvm
-  CLANG: "google"
+  # ZTE UMS9620 内核 build.config.common 官方工具链是 clang-r416183b，
+  # 对应 lineage 选项 (LineageOS/android_prebuilts_clang_kernel_linux-x86_clang-r416183b)
+  CLANG: "lineage"
   GKI: true
   OUTPATH: "out_artifacts"
 
