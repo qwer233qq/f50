@@ -2,7 +2,7 @@ name: clang+llvm
 description: '设置 clang  为 LLVM+Clang'
 runs:
   using: "composite" # 声明这是一个复合动作
-    steps:
+  steps:
     # 1. 设置缓存机制
     - name: Cache LLVM-Clang
       id: cache-llvm
