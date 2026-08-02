@@ -22,21 +22,20 @@ runs:
           
           # 3. 使用 awk 精准锁定并替换结构体内部的目标行
           # 这种写法完全不依赖系统的 sed 版本差异，对 CI 环境极其友好
+          # ZTE UMS9620 内核没有 ANDROID_OEM_DATA_ARRAY，只使用 ANDROID_KABI_USE/RESERVE
           awk '
           /struct ratelimit_state ratelimit;/ {
               print $0;
               print "#if defined(CONFIG_POSIX_MQUEUE)";
               print "\tANDROID_KABI_USE(1, unsigned long mq_bytes);";
               print "\tANDROID_KABI_RESERVE(2);";
-              print "\tANDROID_OEM_DATA_ARRAY(1, 2);";
               print "#else";
               print "\tANDROID_KABI_RESERVE(1);";
               print "\tANDROID_KABI_RESERVE(2);";
-              print "\tANDROID_OEM_DATA_ARRAY(1, 2);";
               print "#endif";
               
-              # 跳过接下来原本要被替换掉的老旧 3 行代码
-              skip = 3;
+              # 跳过接下来原本要被替换掉的老旧 2 行代码
+              skip = 2;
               next;
           }
           {
@@ -73,8 +72,6 @@ runs:
         # Namespaces
         CONFIG_IPC_NS=y
         CONFIG_PID_NS=y
-
-        CONFIG_ARCH_SONY_MURRAY=y
         EOF
 
         # NixOS / tmpfs support

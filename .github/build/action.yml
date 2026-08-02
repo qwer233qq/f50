@@ -1,5 +1,5 @@
-name: bulid sony sm6375 kernel-src
-description: '编译 Sony sm6375 内核'
+name: bulid zte ums9620 kernel-src
+description: '编译 ZTE UMS9620 (MiFi F50) 内核'
 runs:
   using: "composite"
   steps:
@@ -12,9 +12,8 @@ runs:
           cd kernel-src
           make mrproper
                
-          # 基础GKI 框架 + 高通 holi 专属驱动 + DroidSpaces 修正
-          scripts/kconfig/merge_config.sh -m arch/arm64/configs/vendor/holi-qgki_defconfig \
-            arch/arm64/configs/diffconfig/common.config \
+          # 基础 ZTE F50 defconfig + DroidSpaces 修正
+          scripts/kconfig/merge_config.sh -m arch/arm64/configs/f50_defconfig \
             ../droidspaces.config
           
           make olddefconfig
